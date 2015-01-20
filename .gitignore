@@ -6,4 +6,11 @@
 *.out
 *.app
 
+# Solution Files
+*.sdf
+*.sln
+*.opensdf
+*.filters
+
 debug/
+bin/

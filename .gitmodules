@@ -1,0 +1,3 @@
+[submodule "Pure64"]
+	path = Pure64
+	url = https://github.com/ReturnInfinity/Pure64

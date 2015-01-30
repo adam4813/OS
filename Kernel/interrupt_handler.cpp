@@ -5,43 +5,40 @@
 
 extern "C" {
 
-#define PIC1 0x20
-#define PIC2 0xA0
-
 #define ICW1 0x11
 #define ICW4 0x01
 
 	void irq_remap(uint8_t pic1, uint8_t pic2) {
 		/* send ICW1 */
-		__outbyte(PIC1, ICW1);
-		__outbyte(PIC2, ICW1);
+		__outbyte(PIC1_CMD, ICW1);
+		__outbyte(PIC2_CMD, ICW1);
 
 		/* send ICW2 */
-		__outbyte(PIC1 + 1, pic1);
-		__outbyte(PIC2 + 1, pic2);
+		__outbyte(PIC1_DATA, pic1);
+		__outbyte(PIC2_DATA, pic2);
 
 		/* send ICW3 */
-		__outbyte(PIC1 + 1, 4);
-		__outbyte(PIC2 + 1, 2);
+		__outbyte(PIC1_DATA, 4);
+		__outbyte(PIC2_DATA, 2);
 
 		/* send ICW4 */
-		__outbyte(PIC1 + 1, ICW4);
-		__outbyte(PIC2 + 1, ICW4);
+		__outbyte(PIC1_DATA, ICW4);
+		__outbyte(PIC2_DATA, ICW4);
 
 		/* disable all IRQs */
-		__outbyte(PIC1 + 1, 0x0);
-		__outbyte(PIC2 + 1, 0x0);
+		__outbyte(PIC1_DATA, 0x0);
+		__outbyte(PIC2_DATA, 0x0);
 	}
-	
+
 	void irq_set_mask(unsigned char IRQline) {
 		uint16_t port;
 		uint8_t value;
 
 		if (IRQline < 8) {
-			port = PIC1 + 1;
+			port = PIC1_DATA;
 		}
 		else {
-			port = PIC2 + 1;
+			port = PIC2_DATA;
 			IRQline -= 8;
 		}
 		value = __inbyte(port) | (1 << IRQline);
@@ -53,10 +50,10 @@ extern "C" {
 		uint8_t value;
 
 		if (IRQline < 8) {
-			port = PIC1 + 1;
+			port = PIC1_DATA;
 		}
 		else {
-			port = PIC2 + 1;
+			port = PIC2_DATA;
 			IRQline -= 8;
 		}
 		value = __inbyte(port) & ~(1 << IRQline);
@@ -105,10 +102,10 @@ extern "C" {
 	int i86_idt_initialize(uint16_t codeSel) {
 
 		//! set up idtr for processor
-		_idtr.limit = sizeof (struct idt_descriptor) * I86_MAX_INTERRUPTS - 1;
+		_idtr.limit = sizeof(struct idt_descriptor) * I86_MAX_INTERRUPTS - 1;
 		_idtr.base = (uint64_t)&_idt[0];
 
-		memset((unsigned char*)&_idt[0], 0, sizeof (idt_descriptor)* I86_MAX_INTERRUPTS - 1);
+		memset((unsigned char*)&_idt[0], 0, sizeof(idt_descriptor)* I86_MAX_INTERRUPTS - 1);
 
 		irq_remap(0x20, 0x28);
 
@@ -163,7 +160,7 @@ extern "C" {
 		install_irq_gate(47, _irq15);
 
 		//! register default handlers
-		for (unsigned int i = 48; i<I86_MAX_INTERRUPTS; i++)
+		for (unsigned int i = 48; i < I86_MAX_INTERRUPTS; i++)
 			install_irq_gate(i, isr_wrapper);
 
 		//! install our idt
@@ -233,6 +230,20 @@ extern "C" {
 	}
 
 	void irq_handler(regs* r) {
+		// Spurious IRQ check on line 7.
+		if (r->int_no == 39) {
+			uint16_t isr = pic_get_isr();
+			if (!(isr & 0x7)) {
+				return;
+			}
+		}
+		// Spurious IRQ check on line 15.
+		if (r->int_no == 47) {
+			uint16_t isr = pic_get_isr();
+			if (!(isr & 0xF)) {
+				return;
+			}
+		}
 		if (hanlders[r->int_no] != 0) {
 			(hanlders[r->int_no])(*r);
 		}
@@ -240,16 +251,32 @@ extern "C" {
 			term << "Default IRQ for: " << r->int_no << "\n";
 			/*term << "RAX: " << r->rax << " RCX: " << r->rcx <<  " R8: " << r->r8 << " R9: " << r->r9 << " R10: " << r->r10 << " R11: " << r->r11 << "\n";*/
 		}
-		
-		/* If the IDT entry that was invoked was greater than 40
-		 *  (meaning IRQ8 - 15), then we need to send an EOI to
-		 *  the slave controller */
-		if (r->int_no >= 40) {
-			__outbyte(0xA0, 0x20);
+		PIC_sendEOI(r->int_no);
+	}
+
+	void PIC_sendEOI(unsigned char irq) {
+		if ((irq - 32) >= 8) {
+			__outbyte(PIC2_CMD, PIC_EOI);
 		}
 
-		/* In either case, we need to send an EOI to the master
-		*  interrupt controller too */
-		__outbyte(0x20, 0x20);
+		__outbyte(PIC1_CMD, PIC_EOI);
+	}
+
+	static uint16_t __pic_get_irq_reg(int ocw3) {
+		/* OCW3 to PIC CMD to get the register values.  PIC2 is chained, and
+		* represents IRQs 8-15.  PIC1 is IRQs 0-7, with 2 being the chain */
+		__outbyte(PIC1_CMD, ocw3);
+		__outbyte(PIC2_CMD, ocw3);
+		return (__inbyte(PIC2_CMD) << 8) | __inbyte(PIC1_CMD);
+	}
+
+	/* Returns the combined value of the cascaded PICs irq request register */
+	uint16_t pic_get_irr(void) {
+		return __pic_get_irq_reg(PIC_READ_IRR);
+	}
+
+	/* Returns the combined value of the cascaded PICs in-service register */
+	uint16_t pic_get_isr(void) {
+		return __pic_get_irq_reg(PIC_READ_ISR);
 	}
 }

@@ -104,7 +104,7 @@ public:
 		term.WriteString(data);
 		return term;
 	}
-	
+
 	friend Terminal& operator <<(Terminal& term, const uint64_t data) {
 		char buf[32];
 

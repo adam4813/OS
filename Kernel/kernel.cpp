@@ -6,6 +6,7 @@
 #include "runtime/itoa.h"
 #include "interrupt_handler.h"
 #include "pit.h"
+#include "kb.h"
 
 Terminal term;
 
@@ -20,6 +21,7 @@ extern "C" void kernel_main() {
 
 	i86_idt_initialize(0x8);
 	init_timer(50);
+	init_kb();
 
 	for (;;);
 }

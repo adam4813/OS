@@ -213,6 +213,7 @@
   <ItemGroup>
     <ClInclude Include="fpsupport.h" />
     <ClInclude Include="interrupt_handler.h" />
+    <ClInclude Include="kb.h" />
     <ClInclude Include="pit.h" />
     <ClInclude Include="purecall.h" />
     <ClInclude Include="runtime\itoa.h" />

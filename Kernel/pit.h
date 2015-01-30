@@ -9,7 +9,7 @@
 #define		I86_PIT_PORT_COUNTER0		0x40
 #define		I86_PIT_PORT_COUNTER1		0x41
 #define		I86_PIT_PORT_COUNTER2		0x42
-#define		I86_PIT_PORT_COMMAND		    0x43
+#define		I86_PIT_PORT_COMMAND		0x43
 
 
 // PIT command word bits
@@ -37,7 +37,8 @@ extern "C" {
 
 	static void timer_callback(regs& r) {
 		tick++;
-		term << "Tick: " << tick << "\n";
+		//term << "Tick: " << tick << "\n";
+		PIC_sendEOI(32);
 	}
 
 	void init_timer(uint32_t frequency) {

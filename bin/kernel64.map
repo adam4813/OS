@@ -1,0 +1,219 @@
+ kernel64
+
+ Timestamp is 55751d4e (Sun Jun 07 23:42:54 2015)
+
+ Preferred load address is 0000000000100000
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000037eH .text                   CODE
+ 0001:00000380 00001092H .text$mn                CODE
+ 0002:00000000 00000388H .rdata                  DATA
+ 0002:00000388 000000b0H .xdata                  DATA
+ 0003:00000000 0000011cH .data                   DATA
+ 0003:00000120 00001830H .bss                    DATA
+ 0004:00000000 00000114H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base               Lib:Object
+
+ 0000:00000000       __guard_flags              0000000000000000     <absolute>
+ 0000:00000000       __guard_fids_count         0000000000000000     <absolute>
+ 0000:00000000       ___safe_se_handler_table   0000000000000000     <absolute>
+ 0000:00000000       ___safe_se_handler_count   0000000000000000     <absolute>
+ 0000:00000000       __guard_fids_table         0000000000000000     <absolute>
+ 0001:00000000       _ftol2_sse                 0000000000100400     fpsupport.obj
+ 0001:00000010       _isr0                      0000000000100410     isr_wrapper.obj
+ 0001:00000019       _isr1                      0000000000100419     isr_wrapper.obj
+ 0001:00000022       _isr2                      0000000000100422     isr_wrapper.obj
+ 0001:0000002b       _isr3                      000000000010042b     isr_wrapper.obj
+ 0001:00000034       _isr4                      0000000000100434     isr_wrapper.obj
+ 0001:0000003d       _isr5                      000000000010043d     isr_wrapper.obj
+ 0001:00000046       _isr6                      0000000000100446     isr_wrapper.obj
+ 0001:0000004f       _isr7                      000000000010044f     isr_wrapper.obj
+ 0001:00000058       _isr8                      0000000000100458     isr_wrapper.obj
+ 0001:0000005f       _isr9                      000000000010045f     isr_wrapper.obj
+ 0001:00000068       _isr10                     0000000000100468     isr_wrapper.obj
+ 0001:0000006f       _isr11                     000000000010046f     isr_wrapper.obj
+ 0001:00000076       _isr12                     0000000000100476     isr_wrapper.obj
+ 0001:0000007d       _isr13                     000000000010047d     isr_wrapper.obj
+ 0001:00000084       _isr14                     0000000000100484     isr_wrapper.obj
+ 0001:0000008b       _isr15                     000000000010048b     isr_wrapper.obj
+ 0001:00000094       _isr16                     0000000000100494     isr_wrapper.obj
+ 0001:0000009d       _isr17                     000000000010049d     isr_wrapper.obj
+ 0001:000000a6       _isr18                     00000000001004a6     isr_wrapper.obj
+ 0001:000000af       _isr19                     00000000001004af     isr_wrapper.obj
+ 0001:000000b8       _isr20                     00000000001004b8     isr_wrapper.obj
+ 0001:000000c1       _isr21                     00000000001004c1     isr_wrapper.obj
+ 0001:000000ca       _isr22                     00000000001004ca     isr_wrapper.obj
+ 0001:000000d3       _isr23                     00000000001004d3     isr_wrapper.obj
+ 0001:000000dc       _isr24                     00000000001004dc     isr_wrapper.obj
+ 0001:000000e5       _isr25                     00000000001004e5     isr_wrapper.obj
+ 0001:000000ee       _isr26                     00000000001004ee     isr_wrapper.obj
+ 0001:000000f7       _isr27                     00000000001004f7     isr_wrapper.obj
+ 0001:00000100       _isr28                     0000000000100500     isr_wrapper.obj
+ 0001:00000109       _isr29                     0000000000100509     isr_wrapper.obj
+ 0001:00000112       _isr30                     0000000000100512     isr_wrapper.obj
+ 0001:0000011b       _isr31                     000000000010051b     isr_wrapper.obj
+ 0001:00000124       _irq0                      0000000000100524     isr_wrapper.obj
+ 0001:0000012d       _irq1                      000000000010052d     isr_wrapper.obj
+ 0001:00000136       _irq2                      0000000000100536     isr_wrapper.obj
+ 0001:0000013f       _irq3                      000000000010053f     isr_wrapper.obj
+ 0001:00000148       _irq4                      0000000000100548     isr_wrapper.obj
+ 0001:00000151       _irq5                      0000000000100551     isr_wrapper.obj
+ 0001:0000015a       _irq6                      000000000010055a     isr_wrapper.obj
+ 0001:00000163       _irq7                      0000000000100563     isr_wrapper.obj
+ 0001:0000016c       _irq8                      000000000010056c     isr_wrapper.obj
+ 0001:00000175       _irq9                      0000000000100575     isr_wrapper.obj
+ 0001:0000017e       _irq10                     000000000010057e     isr_wrapper.obj
+ 0001:00000187       _irq11                     0000000000100587     isr_wrapper.obj
+ 0001:00000190       _irq12                     0000000000100590     isr_wrapper.obj
+ 0001:00000199       _irq13                     0000000000100599     isr_wrapper.obj
+ 0001:000001a2       _irq14                     00000000001005a2     isr_wrapper.obj
+ 0001:000001ab       _irq15                     00000000001005ab     isr_wrapper.obj
+ 0001:000001b4       isr_wrapper                00000000001005b4     isr_wrapper.obj
+ 0001:00000370       inportb                    0000000000100770     iob.obj
+ 0001:00000377       outportb                   0000000000100777     iob.obj
+ 0001:00000380       install_irq_gate           0000000000100780 f   interrupt_handler.obj
+ 0001:00000470       install_irq_handler        0000000000100870 f   interrupt_handler.obj
+ 0001:000004b0       i86_idt_initialize         00000000001008b0 f   interrupt_handler.obj
+ 0001:000008a0       isr_handler                0000000000100ca0 f   interrupt_handler.obj
+ 0001:00000950       irq_handler                0000000000100d50 f   interrupt_handler.obj
+ 0001:00000a40       PIC_sendEOI                0000000000100e40 f   interrupt_handler.obj
+ 0001:00000ab0       pic_get_irr                0000000000100eb0 f   interrupt_handler.obj
+ 0001:00000ad0       pic_get_isr                0000000000100ed0 f   interrupt_handler.obj
+ 0001:00000af0       irq_remap                  0000000000100ef0 f   interrupt_handler.obj
+ 0001:00000b50       irq_set_mask               0000000000100f50 f   interrupt_handler.obj
+ 0001:00000bc0       irq_clear_mask             0000000000100fc0 f   interrupt_handler.obj
+ 0001:00000c30       ??6@YAAEAVTerminal@@AEAV0@PEBD@Z 0000000000101030 f i interrupt_handler.obj
+ 0001:00000c60       ??6@YAAEAVTerminal@@AEAV0@_K@Z 0000000000101060 f i interrupt_handler.obj
+ 0001:00000ca0       ?PutChar@Terminal@@QEAAXD@Z 00000000001010a0 f i interrupt_handler.obj
+ 0001:00000db0       ?ScanUp@Terminal@@QEAAXXZ  00000000001011b0 f i interrupt_handler.obj
+ 0001:00000e40       ?SetChar@Terminal@@QEAAXDE_K0@Z 0000000000101240 f i interrupt_handler.obj
+ 0001:00000ea0       ?WriteString@Terminal@@QEAAXPEBD@Z 00000000001012a0 f i interrupt_handler.obj
+ 0001:00000f30       ?make_vgaentry@Terminal@@QEAAGDE@Z 0000000000101330 f i interrupt_handler.obj
+ 0001:00000f70       ??2@YAPEAX_K@Z             0000000000101370 f   kernel.obj
+ 0001:00000f80       ??3@YAXPEAX@Z              0000000000101380 f   kernel.obj
+ 0001:00000f90       new[]                      0000000000101390 f   kernel.obj
+ 0001:00000fa0       delete[]                   00000000001013a0 f   kernel.obj
+ 0001:00000fe0       init_timer                 00000000001013e0 f   kernel.obj
+ 0001:000010b0       init_kb                    00000000001014b0 f   kernel.obj
+ 0001:00001120       kernel_main                0000000000101520 f   kernel.obj
+ 0001:00001200       ?Initialize@Terminal@@QEAAXXZ 0000000000101600 f i kernel.obj
+ 0001:000012d0       ?make_color@Terminal@@QEAAEW4vga_color@1@0@Z 00000000001016d0 f i kernel.obj
+ 0001:000012f0       itoa                       00000000001016f0 f   itoa.obj
+ 0003:00000000       exception_messages         0000000000102000     interrupt_handler.obj
+ 0003:00000118       _fltused                   0000000000102118     kernel.obj
+ 0003:00000120       hanlders                   0000000000102120     interrupt_handler.obj
+ 0003:00001930       term                       0000000000103930     kernel.obj
+ 0003:0000194c       tick                       000000000010394c     kernel.obj
+
+ entry point at        0001:00001120
+
+ Static symbols
+
+ 0001:00000290       irq_wrapper                0000000000100690     isr_wrapper.obj
+ 0001:00000a70       __pic_get_irq_reg          0000000000100e70 f   interrupt_handler.obj
+ 0001:00000fb0       timer_callback             00000000001013b0 f   kernel.obj
+ 0001:00001050       kb_callback                0000000000101450 f   kernel.obj
+ 0002:00000000       $SG8713                    0000000000101a00     interrupt_handler.obj
+ 0002:00000014       $SG8714                    0000000000101a14     interrupt_handler.obj
+ 0002:0000001c       $SG8754                    0000000000101a1c     interrupt_handler.obj
+ 0002:00000020       $SG8715                    0000000000101a20     interrupt_handler.obj
+ 0002:00000038       $SG8716                    0000000000101a38     interrupt_handler.obj
+ 0002:00000044       $SG8769                    0000000000101a44     interrupt_handler.obj
+ 0002:00000048       $SG8717                    0000000000101a48     interrupt_handler.obj
+ 0002:00000060       $SG8718                    0000000000101a60     interrupt_handler.obj
+ 0002:00000070       $SG8719                    0000000000101a70     interrupt_handler.obj
+ 0002:00000080       $SG8720                    0000000000101a80     interrupt_handler.obj
+ 0002:00000090       $SG8721                    0000000000101a90     interrupt_handler.obj
+ 0002:000000a0       $SG8722                    0000000000101aa0     interrupt_handler.obj
+ 0002:000000c0       $SG8723                    0000000000101ac0     interrupt_handler.obj
+ 0002:000000c8       $SG8724                    0000000000101ac8     interrupt_handler.obj
+ 0002:000000e0       $SG8725                    0000000000101ae0     interrupt_handler.obj
+ 0002:000000f0       $SG8726                    0000000000101af0     interrupt_handler.obj
+ 0002:00000110       $SG8727                    0000000000101b10     interrupt_handler.obj
+ 0002:00000120       $SG8728                    0000000000101b20     interrupt_handler.obj
+ 0002:00000138       $SG8729                    0000000000101b38     interrupt_handler.obj
+ 0002:00000150       $SG8730                    0000000000101b50     interrupt_handler.obj
+ 0002:00000160       $SG8731                    0000000000101b60     interrupt_handler.obj
+ 0002:00000170       $SG8732                    0000000000101b70     interrupt_handler.obj
+ 0002:00000180       $SG8733                    0000000000101b80     interrupt_handler.obj
+ 0002:00000190       $SG8734                    0000000000101b90     interrupt_handler.obj
+ 0002:000001a0       $SG8735                    0000000000101ba0     interrupt_handler.obj
+ 0002:000001b0       $SG8736                    0000000000101bb0     interrupt_handler.obj
+ 0002:000001c0       $SG8737                    0000000000101bc0     interrupt_handler.obj
+ 0002:000001d0       $SG8738                    0000000000101bd0     interrupt_handler.obj
+ 0002:000001e0       $SG8739                    0000000000101be0     interrupt_handler.obj
+ 0002:000001f0       $SG8740                    0000000000101bf0     interrupt_handler.obj
+ 0002:00000200       $SG8741                    0000000000101c00     interrupt_handler.obj
+ 0002:00000210       $SG8742                    0000000000101c10     interrupt_handler.obj
+ 0002:00000220       $SG8743                    0000000000101c20     interrupt_handler.obj
+ 0002:00000230       $SG8744                    0000000000101c30     interrupt_handler.obj
+ 0002:00000240       $SG8745                    0000000000101c40     interrupt_handler.obj
+ 0002:00000250       $SG8746                    0000000000101c50     interrupt_handler.obj
+ 0002:00000260       $SG8747                    0000000000101c60     interrupt_handler.obj
+ 0002:00000270       $SG8751                    0000000000101c70     interrupt_handler.obj
+ 0002:00000288       $SG8753                    0000000000101c88     interrupt_handler.obj
+ 0002:000002a8       $SG8770                    0000000000101ca8     interrupt_handler.obj
+ 0002:000002c0       $SG8701                    0000000000101cc0     kernel.obj
+ 0002:000002c4       $SG8702                    0000000000101cc4     kernel.obj
+ 0002:000002cc       $SG8706                    0000000000101ccc     kernel.obj
+ 0002:000002d0       $SG8707                    0000000000101cd0     kernel.obj
+ 0002:000002e4       $SG8712                    0000000000101ce4     kernel.obj
+ 0002:000002f0       $SG8713                    0000000000101cf0     kernel.obj
+ 0002:00000300       $SG8714                    0000000000101d00     kernel.obj
+ 0002:00000314       $SG8716                    0000000000101d14     kernel.obj
+ 0002:00000320       $SG8717                    0000000000101d20     kernel.obj
+ 0002:00000340       $SG2565                    0000000000101d40     itoa.obj
+ 0002:00000388       $unwind$?make_vgaentry@Terminal@@QEAAGDE@Z 0000000000101d88     interrupt_handler.obj
+ 0002:00000390       $unwind$?SetChar@Terminal@@QEAAXDE_K0@Z 0000000000101d90     interrupt_handler.obj
+ 0002:00000398       $unwind$?ScanUp@Terminal@@QEAAXXZ 0000000000101d98     interrupt_handler.obj
+ 0002:000003a0       $unwind$?PutChar@Terminal@@QEAAXD@Z 0000000000101da0     interrupt_handler.obj
+ 0002:000003a8       $unwind$??6@YAAEAVTerminal@@AEAV0@_K@Z 0000000000101da8     interrupt_handler.obj
+ 0002:000003a8       $unwind$?WriteString@Terminal@@QEAAXPEBD@Z 0000000000101da8     interrupt_handler.obj
+ 0002:000003b0       $unwind$??6@YAAEAVTerminal@@AEAV0@PEBD@Z 0000000000101db0     interrupt_handler.obj
+ 0002:000003b8       $unwind$install_irq_gate   0000000000101db8     interrupt_handler.obj
+ 0002:000003c0       $unwind$i86_idt_initialize 0000000000101dc0     interrupt_handler.obj
+ 0002:000003c8       $unwind$isr_handler        0000000000101dc8     interrupt_handler.obj
+ 0002:000003d0       $unwind$irq_handler        0000000000101dd0     interrupt_handler.obj
+ 0002:000003d8       $unwind$__pic_get_irq_reg  0000000000101dd8     interrupt_handler.obj
+ 0002:000003e0       $unwind$pic_get_irr        0000000000101de0     interrupt_handler.obj
+ 0002:000003e8       $unwind$pic_get_isr        0000000000101de8     interrupt_handler.obj
+ 0002:000003f0       $unwind$irq_set_mask       0000000000101df0     interrupt_handler.obj
+ 0002:000003f8       $unwind$irq_clear_mask     0000000000101df8     interrupt_handler.obj
+ 0002:00000400       $unwind$?Initialize@Terminal@@QEAAXXZ 0000000000101e00     kernel.obj
+ 0002:00000408       $unwind$timer_callback     0000000000101e08     kernel.obj
+ 0002:00000410       $unwind$init_timer         0000000000101e10     kernel.obj
+ 0002:00000418       $unwind$kb_callback        0000000000101e18     kernel.obj
+ 0002:00000420       $unwind$init_kb            0000000000101e20     kernel.obj
+ 0002:00000428       $unwind$kernel_main        0000000000101e28     kernel.obj
+ 0002:00000430       $unwind$itoa               0000000000101e30     itoa.obj
+ 0003:00000920       _idt                       0000000000102920     interrupt_handler.obj
+ 0003:00001920       _idtr                      0000000000103920     interrupt_handler.obj
+ 0004:00000000       $pdata$install_irq_gate    0000000000103a00     interrupt_handler.obj
+ 0004:0000000c       $pdata$i86_idt_initialize  0000000000103a0c     interrupt_handler.obj
+ 0004:00000018       $pdata$isr_handler         0000000000103a18     interrupt_handler.obj
+ 0004:00000024       $pdata$irq_handler         0000000000103a24     interrupt_handler.obj
+ 0004:00000030       $pdata$__pic_get_irq_reg   0000000000103a30     interrupt_handler.obj
+ 0004:0000003c       $pdata$pic_get_irr         0000000000103a3c     interrupt_handler.obj
+ 0004:00000048       $pdata$pic_get_isr         0000000000103a48     interrupt_handler.obj
+ 0004:00000054       $pdata$irq_set_mask        0000000000103a54     interrupt_handler.obj
+ 0004:00000060       $pdata$irq_clear_mask      0000000000103a60     interrupt_handler.obj
+ 0004:0000006c       $pdata$??6@YAAEAVTerminal@@AEAV0@PEBD@Z 0000000000103a6c     interrupt_handler.obj
+ 0004:00000078       $pdata$??6@YAAEAVTerminal@@AEAV0@_K@Z 0000000000103a78     interrupt_handler.obj
+ 0004:00000084       $pdata$?PutChar@Terminal@@QEAAXD@Z 0000000000103a84     interrupt_handler.obj
+ 0004:00000090       $pdata$?ScanUp@Terminal@@QEAAXXZ 0000000000103a90     interrupt_handler.obj
+ 0004:0000009c       $pdata$?SetChar@Terminal@@QEAAXDE_K0@Z 0000000000103a9c     interrupt_handler.obj
+ 0004:000000a8       $pdata$?WriteString@Terminal@@QEAAXPEBD@Z 0000000000103aa8     interrupt_handler.obj
+ 0004:000000b4       $pdata$?make_vgaentry@Terminal@@QEAAGDE@Z 0000000000103ab4     interrupt_handler.obj
+ 0004:000000c0       $pdata$timer_callback      0000000000103ac0     kernel.obj
+ 0004:000000cc       $pdata$init_timer          0000000000103acc     kernel.obj
+ 0004:000000d8       $pdata$kb_callback         0000000000103ad8     kernel.obj
+ 0004:000000e4       $pdata$init_kb             0000000000103ae4     kernel.obj
+ 0004:000000f0       $pdata$kernel_main         0000000000103af0     kernel.obj
+ 0004:000000fc       $pdata$?Initialize@Terminal@@QEAAXXZ 0000000000103afc     kernel.obj
+ 0004:00000108       $pdata$itoa                0000000000103b08     itoa.obj
+
+ Exports
+
+  ordinal    name
+

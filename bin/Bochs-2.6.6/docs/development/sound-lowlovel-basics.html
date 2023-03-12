@@ -1,0 +1,1619 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>The sound lowlevel interface</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Bochs Developers Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="About the code"
+HREF="about-the-code.html"><LINK
+REL="PREVIOUS"
+TITLE="Sound Blaster 16 Emulation"
+HREF="sb16-emulation-basics.html"><LINK
+REL="NEXT"
+TITLE="Harddisk Images based on redologs"
+HREF="harddisk-redologs.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Bochs Developers Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="sb16-emulation-basics.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. About the code</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="harddisk-redologs.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="SOUND-LOWLOVEL-BASICS"
+>2.9. The sound lowlevel interface</A
+></H1
+><P
+>This file is intended for programmers who would like to port the sound
+output routines to their platform. It gives a short outline what services
+have to be provided.</P
+><P
+>You should also have a look at the exisiting files, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>SOUNDMOD.CC</I
+></SPAN
+>
+and e.g. <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>SOUNDLNX.CC</I
+></SPAN
+> for Linux or <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>SOUNDWIN.CC</I
+></SPAN
+>
+for Windows and their respective header files to get an idea about how these things
+really work.</P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN465"
+>2.9.1. Files</A
+></H2
+><P
+>The main include file for a lowlevel sound driver is <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>iodev.h</I
+></SPAN
+>.
+It has all definitions for the system-independent functions that a sound driver
+uses. The sound driver also needs to include <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>soundmod.h</I
+></SPAN
+> for
+the definition of the base class <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_sound_output_c</I
+></SPAN
+>.</P
+><P
+>Additionally, every output driver will have an include file, which should be
+included on top of <TT
+CLASS="FILENAME"
+>soundmod.cc</TT
+> to allow the emulator
+to use that driver. A soundcard does not need to include the specific driver
+header.</P
+><P
+>To actually make the emulator use any specific driver as the default,
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUND_LOWLEVEL_C</I
+></SPAN
+> has to be set to the name of the
+respective output class.</P
+><P
+>Note that if your class contains any system-specific statements,
+include-files and so on, you should enclose both the include-file and
+the CC-file in an <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>#if defined</I
+></SPAN
+> (OS-define) construct.
+Also don't forget to add your file to the list of lowlevel sound object
+files (<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>SOUNDLOW_OBJS</I
+></SPAN
+>) in the file <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>configure.in</I
+></SPAN
+>
+and to regenerate the configure script,</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN479"
+>2.9.2. Classes</A
+></H2
+><P
+>The following classes are involved with the sound lowlevel interface:</P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_soundmod_ctl_c</I
+></SPAN
+> is a pseudo device that is used to
+initialize the sound driver depending on the configuration. In addition to
+this, it has methods for the PC speaker beep generation and the VOC file
+output.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_sound_output_c</I
+></SPAN
+> is the base output class. It has all
+the methods used by the soundcard emulation, but only as stubs and does not
+actually produce any output. These methods are then called by
+the emulator whenever output is necessary.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_sound_OS_c</I
+></SPAN
+> is derived from
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_sound_output_c</I
+></SPAN
+>. It contains the code to generate
+output for the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>OS</I
+></SPAN
+> operating system.
+It is not necessary to override all the methods defined in the base class, since
+virtual functions are used. The constructor should call the inherited constructor
+as usual, even though the current constructor does not do anything yet.</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN494"
+>2.9.3. The base class <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bx_sound_output_c</I
+></SPAN
+></A
+></H2
+><P
+><PRE
+CLASS="SCREEN"
+>class bx_sound_lowlevel_c : public logfunctions {
+public:
+
+  bx_sound_lowlevel_c();
+  virtual ~bx_sound_lowlevel_c();
+
+  virtual int get_type() {return BX_SOUNDLOW_DUMMY;}
+
+  virtual int waveready();
+  virtual int midiready();
+
+  virtual int openmidioutput(const char *mididev);
+  virtual int sendmidicommand(int delta, int command, int length, Bit8u data[]);
+  virtual int closemidioutput();
+
+  virtual int openwaveoutput(const char *wavedev);
+  virtual int startwaveplayback(int frequency, int bits, bx_bool stereo, int format);
+  virtual int sendwavepacket(int length, Bit8u data[]);
+  virtual int stopwaveplayback();
+  virtual int closewaveoutput();
+
+  virtual int openwaveinput(const char *wavedev, sound_record_handler_t rh);
+  virtual int startwaverecord(int frequency, int bits, bx_bool stereo, int format);
+  virtual int getwavepacket(int length, Bit8u data[]);
+  virtual int stopwaverecord();
+  virtual int closewaveinput();
+
+  static void record_timer_handler(void *);
+  void record_timer(void);
+protected:
+  int record_timer_index;
+  int record_packet_size;
+  sound_record_handler_t record_handler;
+};</PRE
+>
+The base class for sound lowlevel support is derived from the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>logfunctions</I
+></SPAN
+>
+class to make the Bochs logging capabilities available in the sound driver code.
+It contains the framework for wave input (recording) support. The base class is
+in use if the "dummy" sound driver is selected or in case no platform or library
+specific implementation is available.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN500"
+>2.9.4. Methods</A
+></H2
+><P
+>The following are the methods that the sound driver class has to override.
+All but constructor and destructor have to return either
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_OK</I
+></SPAN
+> <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(0)</I
+></SPAN
+> if the function
+was successful, or <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_ERR</I
+></SPAN
+> <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(1)</I
+></SPAN
+>
+if not. If any of the initialization functions fail, output to that device is
+disabled until the emulator is restarted.</P
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN507"
+>2.9.4.1. bx_sound_OS_c()</A
+></H3
+><P
+>The emulator instantiates the class at the initialization of Bochs.</P
+><P
+>The constructor should <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> allocate the output devices.
+This shouldn't be done until the actual output occurs; in either
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openmidioutput()</I
+></SPAN
+> or <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+>.
+Otherwise it would be impossible to have two copies of Bochs running
+concurrently (if anybody ever wants to do this).</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN514"
+>2.9.4.2. ~bx_sound_OS_c()</A
+></H3
+><P
+>The instance is destroyed just before Bochs ends.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN517"
+>2.9.4.3. int get_type()</A
+></H3
+><P
+>Returns.the ID of the sound driver module. The default value is <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_DUMMY</I
+></SPAN
+>.
+New values should be added to the list in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>soundmod.h</I
+></SPAN
+>.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN522"
+>2.9.4.4. int openmidioutput(char *device)</A
+></H3
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openmidioutput()</I
+></SPAN
+> is called when the first midi output starts.
+It is only called if the midi output to the driver is active (midimode 1). It should
+prepare the given MIDI hardware for receiving midi commands.</P
+></LI
+></UL
+><P
+>Description of the parameters:</P
+><P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+> is a system-dependent variable.
+It contains the value of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>MIDI=device</I
+></SPAN
+> configuration option.</P
+></LI
+><LI
+><P
+>Note that only one midi output device will be used at any one time.
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+>
+may not have the same value throughout one session, but it will be closed
+before it is changed.</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN538"
+>2.9.4.5. int midiready()</A
+></H3
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>midiready()</I
+></SPAN
+> is called whenever the applications asks if the
+midi queue can accept more data.</P
+><P
+>Return values:</P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_OK</I
+></SPAN
+> if the midi output device is ready.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_ERR</I
+></SPAN
+> if it isn't ready.</P
+></LI
+></UL
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Note: </I
+></SPAN
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>midiready()</I
+></SPAN
+> will be called a few times
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>before</I
+></SPAN
+> the device is opened. If this is the case, it should
+always report that it is ready, otherwise the application (not Bochs)
+will hang.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN554"
+>2.9.4.6. int sendmidicommand(int delta, int command, int length, Bit8u data[])</A
+></H3
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>sendmidicommand()</I
+></SPAN
+>is called whenever a complete midi command has
+been written to the emulator. It should then send the given midi command to the midi hardware.
+It will only be called after the midi output has been opened. Note that
+if at all possible it should not wait for the completion of the command
+and instead indicate that the device is not ready during the execution
+of the command. This is to avoid delays in the program while it is
+generating midi output.</P
+><P
+>Description of the parameters:</P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>delta</I
+></SPAN
+> is the number of delta ticks that
+have passed since the last command has been issued. It is always zero for
+the first command. There are 24 delta ticks per quarter, and 120 quarters
+per minute, thus 48 delta ticks per second.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>command</I
+></SPAN
+> is the midi command byte (sometimes
+called status byte), in the usual range of 0x80..0xff. For more information
+please see the midi standard specification.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>length</I
+></SPAN
+> is the number of data bytes that
+are contained in the data structure. This does <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> include the status
+byte which is not replicated in the data array. It can only be greater
+than 3 for SysEx messages (commands <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0xF0</I
+></SPAN
+> and <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0xF7</I
+></SPAN
+>)</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>data[]</I
+></SPAN
+> is the array of these data bytes,
+in the order they have in the standard MIDI specification.
+Note, it might be <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>NULL</I
+></SPAN
+> if length==0.</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN576"
+>2.9.4.7. int closemidioutput()</A
+></H3
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>closemidioutput()</I
+></SPAN
+> is called before shutting down Bochs or
+when the
+emulator gets the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>stop_output</I
+></SPAN
+> command through the emulator port.
+After this, no more output will be necessary until <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openmidioutput()</I
+></SPAN
+>
+is called again, but <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>midiready()</I
+></SPAN
+> might still be called. It should do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Wait for all remaining messages to be completed</P
+></LI
+><LI
+><P
+>Reset and close the midi output device</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN588"
+>2.9.4.8. int openwaveoutput(char *device)</A
+></H3
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+> is called when the sound subsystem
+initializes. It should do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Open the given device, and prepare it for wave output</P
+></LI
+></UL
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>or</I
+></SPAN
+></P
+><P
+></P
+><UL
+><LI
+><P
+>Store the device name so that the device can be opened in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback()</I
+></SPAN
+>.</P
+></LI
+></UL
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+> will only be called once, whereas
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback()</I
+></SPAN
+> is called for every new wave output
+command to the soundcard emulation. If feasible, it could be useful to open
+and/or lock  the output device in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback()</I
+></SPAN
+> as
+opposed to <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+> to ensure that it can be used
+by other applications while Bochs doesn't need it.</P
+><P
+>However, many older applications don't use the auto-init DMA
+mode, which means that they start a new DMA transfer for every single
+block of output, which means usually for every 2048 bytes or so.
+Unfortunately there is no way of knowing whether the application will
+restart an expired DMA transfer soon, so that in these cases the
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback</I
+></SPAN
+> function will be called very often, and it
+isn't a good idea to have it reopen the device every time.</P
+><P
+>The buffer when writing to the device should not be overly large.
+Usually about four buffers of 4096 bytes produce best results. Smaller
+buffers could mean too much overhead, while larger buffers contribute
+to the fact that the actual output will always be late when the application
+tries to synchronize it with for example graphics.</P
+><P
+>The parameters are the following: </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+> is the wave device selected by the user. It is
+strictly system-dependent. The value is that of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>waveout=device</I
+></SPAN
+>
+configuration parameter of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>sound</I
+></SPAN
+> bochsrc option.</P
+></LI
+></UL
+><P
+>Note that only one wave output device will be used at any one time.
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+> may not have the same value throughout one session,
+but it will be closed before it is changed.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN618"
+>2.9.4.9. int startwaveplayback(int frequency, int bits, int stereo, int format)</A
+></H3
+><P
+>This function is called whenever the emulator receives a new wave output command.
+It should do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Open the wave output device, unless <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+> did that
+already</P
+></LI
+><LI
+><P
+>Prepare the device for data and set the device parameters to those given
+in the function call</P
+></LI
+></UL
+><P
+>The parameters are the following:</P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>frequency</I
+></SPAN
+> is the desired frequency of the
+output. Because of the capabities of the soundcards, it can have any value
+between 5000 and 44,100.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bits</I
+></SPAN
+> is either 8 or 16, denoting the resolution
+of one sample.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>stereo</I
+></SPAN
+> is either 1 for stereo output, or 0 for mono output.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>format</I
+></SPAN
+> is a bit-coded value (see below).</P
+></LI
+></UL
+><P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN642"
+></A
+><P
+><B
+>Table 2-4. format bits</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><THEAD
+><TR
+><TH
+>Bit number</TH
+><TH
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+> 0 (LSB)  </TD
+><TD
+><P
+> 0: unsigned data </P
+><P
+>                                            1: signed data </P
+></TD
+></TR
+><TR
+><TD
+> 1..6     </TD
+><TD
+> Type of codec (see below) </TD
+></TR
+><TR
+><TD
+> 7        </TD
+><TD
+><P
+> 0: no reference byte </P
+><P
+>                                             1: with reference byte </P
+></TD
+></TR
+><TR
+><TD
+> 8..x     </TD
+><TD
+> reserved (0) </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+
+<DIV
+CLASS="TABLE"
+><A
+NAME="AEN666"
+></A
+><P
+><B
+>Table 2-5. codecs</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><THEAD
+><TR
+><TH
+>Value</TH
+><TH
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+> 0 </TD
+><TD
+> PCM (raw data) </TD
+></TR
+><TR
+><TD
+> 1 </TD
+><TD
+> reserved </TD
+></TR
+><TR
+><TD
+> 2 </TD
+><TD
+> 2-bit ADPCM (Creative Labs format) </TD
+></TR
+><TR
+><TD
+> 3 </TD
+><TD
+> 2.4-bit (3-bit) ADPCM (Creative Labs format) </TD
+></TR
+><TR
+><TD
+> 4 </TD
+><TD
+> 4-bit ADPCM (Creative Labs format) </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><P
+>Other codecs are not supported by the SB hardware. In fact, most applications will
+translate their data into raw data, so that in most cases the codec will be zero.</P
+><P
+>The number of bytes per sample can be calculated from this as (bits / 8) * (stereo + 1).</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN691"
+>2.9.4.10. int waveready()</A
+></H3
+><P
+>This is called whenever the emulator has another output buffer ready
+and would like to pass it to the output class. This happens every
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_WAVEPACKETSIZE</I
+></SPAN
+> bytes, or whenever a DMA transfer
+is done or aborted.</P
+><P
+>It should return whether the output device is ready for another buffer
+of <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_WAVEPACKETSIZE</I
+></SPAN
+> bytes.
+If <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_ERR</I
+></SPAN
+>
+is returned, the emulator waits about 1/(frequency * bytes per sample) seconds
+and then asks again. The DMA transfer is stalled during that time, but
+the application keeps running, until the output device becomes ready.</P
+><P
+>As opposed to <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>midiready(), waveready()</I
+></SPAN
+> will <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> be
+called unless the device is open.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN701"
+>2.9.4.11. int sendwavepacket(int length, Bit8u data[])</A
+></H3
+><P
+>This function is called whenever a data packet of at most
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_WAVEPACKETSIZE</I
+></SPAN
+> is ready at the soundcard
+emulation. It should then do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Send this wave packet to the wave hardware</P
+></LI
+></UL
+><P
+>This function <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>has</I
+></SPAN
+> to be synchronous, meaning that it <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>has</I
+></SPAN
+>
+to return immediately, and <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> wait until the output is done. Also,
+this function might be called before the previous output is done. If your
+hardware can't append the new output to the old one, you will have to implement
+this yourself, or the output will be very chunky, with as much silence
+between the blocks as the blocks take to play. This is not what you want.
+Instead, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>waveready()</I
+></SPAN
+> should return <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUND_OUTPUT_ERR</I
+></SPAN
+>
+until the device accepts another block of data.</P
+><P
+>Parameters:</P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>length</I
+></SPAN
+> is the number of data bytes in
+the data stream. It will never be larger than <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>BX_SOUNDLOW_WAVEPACKETSIZE</I
+></SPAN
+>.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>data</I
+></SPAN
+> is the array of data bytes.</P
+></LI
+></UL
+><P
+>The order of bytes in the data stream is the same as that in the Wave file format:
+
+<DIV
+CLASS="TABLE"
+><A
+NAME="AEN724"
+></A
+><P
+><B
+>Table 2-6. wave output types</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><THEAD
+><TR
+><TH
+>Output type</TH
+><TH
+>Sequence of data bytes</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+> 8 bit mono </TD
+><TD
+> Sample 1; Sample 2; Sample 3; etc. </TD
+></TR
+><TR
+><TD
+> 8 bit stereo </TD
+><TD
+> Sample 1, Channel 0; Sample 1, Channel 1; Sample 2, Channel 0; Sample 2, Channel 1; etc. </TD
+></TR
+><TR
+><TD
+> 16 bit mono </TD
+><TD
+> Sample 1, LSB; Sample 1, MSB; Sample 2, LSB; Sample 2, MSB; etc. </TD
+></TR
+><TR
+><TD
+> 16 bit stereo </TD
+><TD
+> Sample 1, LSB, Channel 0; Sample 1, MSB, Channel 0; Sample 1, LSB, Channel 1; Sample 1, MSB, Channel 1; etc. </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><P
+>Typically 8 bit data will be unsigned with values from 0 to 255, and
+16 bit data will be signed with values from -32768 to 32767, although the
+SB16 is not limited to this. For further information on the codecs and
+the use of reference bytes please refer to the Creative Labs Sound Blaster
+Programmer's Manual, which can be downloaded from the Creative Labs web
+site.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN745"
+>2.9.4.12. int stopwaveplayback()</A
+></H3
+><P
+>This function is called at the end of a wave data transfer. It should do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Close the output device if it was opened by <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback()</I
+></SPAN
+>.
+and it's not going to be opened soon. Which is almost impossible to tell.</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN752"
+>2.9.4.13. int closewaveoutput()</A
+></H3
+><P
+>This function is called just before the Bochs simulation quits. It should do
+the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Close the output device, if this hasn't been done by <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>stopwaveplayback()</I
+></SPAN
+>.</P
+></LI
+></UL
+><P
+>Typically, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>stopwaveplayback()</I
+></SPAN
+> will be called several times, whenever
+a data transfer is done, where <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>closewaveoutput()</I
+></SPAN
+> will only be called
+once. However, in the future it might be possible that <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveoutput()</I
+></SPAN
+>
+is called again, for example if the user chose to switch devices while
+Bochs was running. This is not supported at the moment, but might be in
+the future.</P
+></DIV
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN763"
+>2.9.5. Methods and members for wave input (recording) support</A
+></H2
+><P
+>The wave input feature is relatively new in Bochs. If a lowlevel driver does not
+implement recording, the methods of the base class ("dummy" driver) are used. They
+return silence to let the input mechanism of the soundcard emulation work. The
+soundcard emulator object needs to implement a callback function to notifies
+the emulation about available data. This function usually calls the driver method
+to get the wave data packet. The driver objects has a periodic timer with an
+interval of 0.1 emulated seconds that is active during recording. The timer
+handler processes the wave data recorded with platform or library specific
+function and finally notifies the emulator.</P
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN766"
+>2.9.5.1. int openwaveinput(char *device, sound_record_handler_t rh)</A
+></H3
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveinput()</I
+></SPAN
+> is called when the sound emulation first
+receives a sound recording command. It should do the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>Open the given device, and prepare it for wave input</P
+></LI
+></UL
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>or</I
+></SPAN
+></P
+><P
+></P
+><UL
+><LI
+><P
+>Store the device name so that the device can be opened in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaverecord()</I
+></SPAN
+>.</P
+></LI
+></UL
+><P
+>In addition to this the record handler value should be stored and the record timer
+should be registered. This is the definition of record handler callback function:
+<PRE
+CLASS="SCREEN"
+>typedef Bit32u (*sound_record_handler_t)(void *arg, Bit32u len);</PRE
+></P
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveinput()</I
+></SPAN
+> will only be called once, whereas
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaverecord()</I
+></SPAN
+> is called for every new wave input
+command to the soundcard emulation. If feasible, it could be useful to open
+and/or lock  the input device in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaverecord()</I
+></SPAN
+> as
+opposed to <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>openwaveinput()</I
+></SPAN
+> to ensure that it can be used
+by other applications while Bochs doesn't need it.</P
+><P
+>The parameters are the following: </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+> is the wave device selected by the user. It is
+strictly system-dependent. The value is that of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>wavein=device</I
+></SPAN
+>
+configuration parameter of the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>sound</I
+></SPAN
+> bochsrc option.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>rh</I
+></SPAN
+> is a pointer to the record handler method of the sound
+emulation. When sound recording is active, this handler is called periodicly to
+notify the sound emulation about newly available data.</P
+></LI
+></UL
+><P
+>Note that only one wave input device will be used at any one time.
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>device</I
+></SPAN
+> may not have the same value throughout one session,
+but it will be closed before it is changed.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN798"
+>2.9.5.2. int startwaverecord(int frequency, int bits, int stereo, int format)</A
+></H3
+><P
+>This method is very similar to the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>startwaveplayback()</I
+></SPAN
+> method for
+sound output and it takes the same argument list. It should set up the input device
+for recording, calculate the size of the recording packet for 0.1 second and start
+the record timer.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN802"
+>2.9.5.3. int getwavepacket(int length, Bit8u data[])</A
+></H3
+><P
+>This method is called from the record handler method of the sound emulation device
+to retrieve the recorded wave data packet.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN805"
+>2.9.5.4. int stopwaverecord()</A
+></H3
+><P
+>This function is called to stop the wave recording. It deactivates the timer that
+calls the method to perform the recording.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN808"
+>2.9.5.5. int closewaveinput()</A
+></H3
+><P
+>This function is called just before the Bochs simulation quits. It is very
+similar to the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>closewaveoutput()</I
+></SPAN
+> method.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="sb16-emulation-basics.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="harddisk-redologs.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Sound Blaster 16 Emulation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="about-the-code.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Harddisk Images based on redologs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

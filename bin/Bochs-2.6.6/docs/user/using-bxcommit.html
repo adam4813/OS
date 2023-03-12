@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Using the bxcommit tool</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Bochs User Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tips and Techniques"
+HREF="howto.html"><LINK
+REL="PREVIOUS"
+TITLE="Using the bximage tool"
+HREF="using-bximage.html"><LINK
+REL="NEXT"
+TITLE="Guest operating systems"
+HREF="guests.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Bochs User Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="using-bximage.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Tips and Techniques</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="guests.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="USING-BXCOMMIT"
+>8.22. Using the bxcommit tool</A
+></H1
+><P
+>This legacy tool has been designed to commit redologs into flat images.</P
+><P
+>It supports committing 'undoable' redologs to 'flat' or 'growing' base images
+and 'growing' to 'flat' image conversion (and vice versa). Committing / converting
+other disk image types is supported by the new bximage utility (<A
+HREF="using-bximage.html"
+>Section 8.21</A
+>).</P
+><P
+>This tool is completely interactive if no command line arguments are used.
+Then bxcommit asks for the operation mode, the flat image name, the redolog name,
+and whether to remove the source file after the commit or conversion is done.
+It can be switched to a non-interactive mode if all required parameters are
+given in the command line.
+<PRE
+CLASS="SCREEN"
+>bxcommit [options] [flat filename] [redolog filename]
+
+Supported options:
+  -mode=commit-undoable  commit undoable redolog to flat file
+  -mode=growing-to-flat  create flat disk image from growing disk image
+  -mode=flat-to-growing  create growing disk image from flat disk image
+  -d               delete redolog file after commit
+  -q               quiet mode (don't prompt for user input)
+  --help           display this help and exit
+
+The first filename parameter specifies the name of the base image that will be
+created or modified. The second one specifies the name of the redolog.</PRE
+></P
+><P
+>Session example :
+<PRE
+CLASS="SCREEN"
+>$ ./bxcommit
+========================================================================
+                               bxcommit
+           Growing / Undoable Disk Image Commit Tool for Bochs
+========================================================================
+
+1. Commit 'undoable' redolog to 'flat' or 'growing' mode base image
+2. Create 'flat' disk image from 'growing' disk image
+3. Create 'growing' disk image from 'flat' disk image
+
+0. Quit
+
+Please choose one [0] 1
+
+What is the flat image name?
+[c.img] myfile.img
+
+What is the redolog name?
+[myfile.img.redolog] toapply.redolog
+
+Should the redolog been removed afterwards?
+[yes]</PRE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="using-bximage.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="guests.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Using the bximage tool</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="howto.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Guest operating systems</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
